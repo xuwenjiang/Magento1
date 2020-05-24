@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  servermagento:
+    build: ./dockerfiles/nginx
+    ports:
+      - "8090:80"
+    volumes:
+      - ./src:/var/www/
+      - ./configs/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - phpmagento
+  phpmagento:
+    build: ./dockerfiles/phpmagento
+    volumes:
+      - ./src:/var/www/
+  mysqldatabse:
+    image: mysql:5.6
+    restart: always
+    ports:
+      - "13306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: magento
+      MYSQL_USER: magentouser
+      MYSQL_PASSWORD: password
